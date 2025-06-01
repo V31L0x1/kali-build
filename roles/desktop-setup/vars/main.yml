@@ -1,0 +1,73 @@
+---
+# vars file for i3-desktop-environment
+
+# Package lists organized by category
+basic_packages:
+  - wget
+  - curl
+  - git
+  - thunar
+
+desktop_packages:
+  - arandr
+  - flameshot
+  - arc-theme
+  - feh
+  - i3blocks
+  - i3status
+  - i3
+  - i3-wm
+  - lxappearance
+  - python3-pip
+  - rofi
+  - unclutter
+  - cargo
+  - compton
+  - papirus-icon-theme
+  - imagemagick
+
+i3_build_dependencies:
+  - libxcb-shape0-dev
+  - libxcb-keysyms1-dev
+  - libpango1.0-dev
+  - libxcb-util0-dev
+  - libxcb1-dev
+  - libxcb-icccm4-dev
+  - libyajl-dev
+  - libev-dev
+  - libxcb-xkb-dev
+  - libxcb-cursor-dev
+  - libxkbcommon-dev
+  - libxcb-xinerama0-dev
+  - libxkbcommon-x11-dev
+  - libstartup-notification0-dev
+  - libxcb-randr0-dev
+  - libxcb-xrm0
+  - libxcb-xrm-dev
+  - autoconf
+  - meson
+  - libxcb-render-util0-dev
+  - libxcb-xfixes0-dev
+  - ninja-build
+  - libpcre2-dev
+  - libcairo2-dev
+
+# Configuration files to copy
+config_files:
+  - { src: ".tmux.conf", dest: ".tmux.conf", mode: "0644" }
+  - { src: ".config/i3/config", dest: ".config/i3/config", mode: "0644" }
+  - { src: ".config/alacritty/alacritty.yml", dest: ".config/alacritty/alacritty.yml", mode: "0644" }
+  - { src: ".config/alacritty/alacritty.toml", dest: ".config/alacritty/alacritty.toml", mode: "0644" }
+  - { src: ".config/i3/i3blocks.conf", dest: ".config/i3/i3blocks.conf", mode: "0644" }
+  - { src: ".config/compton/compton.conf", dest: ".config/compton/compton.conf", mode: "0644" }
+  - { src: ".config/rofi/config", dest: ".config/rofi/config", mode: "0644" }
+  - { src: ".fehbg", dest: ".fehbg", mode: "0755" }
+  - { src: ".config/i3/clipboard_fix.sh", dest: ".config/i3/clipboard_fix.sh", mode: "0755" }
+
+# Directories to create
+config_directories:
+  - ".config/i3"
+  - ".config/compton"
+  - ".config/rofi"
+  - ".config/alacritty"
+

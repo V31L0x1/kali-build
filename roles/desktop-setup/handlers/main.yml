@@ -1,0 +1,23 @@
+---
+# handlers file for i3-desktop-environment
+
+- name: restart i3
+  ansible.builtin.command:
+    cmd: i3-msg restart
+  listen: "restart i3"
+  ignore_errors: yes
+  changed_when: false
+
+- name: reload i3 config
+  ansible.builtin.command:
+    cmd: i3-msg reload
+  listen: "reload i3 config"
+  ignore_errors: yes
+  changed_when: false
+
+- name: refresh font cache
+  ansible.builtin.command:
+    cmd: fc-cache -fv
+  listen: "refresh fonts"
+  changed_when: false
+

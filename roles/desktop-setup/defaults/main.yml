@@ -1,0 +1,39 @@
+---
+# defaults file for i3-desktop-environment
+
+# Font configuration
+i3_font_family: "RobotoMono Nerd Font Regular"
+i3_font_size: 9
+
+# i3bar configuration
+i3bar_font_family: "JetBrainsMono Nerd Font Mono"
+i3bar_font_size: 9
+i3bar_position: "top"
+i3bar_height: 26
+
+# i3-gaps configuration
+i3_gaps_inner: 2
+i3_gaps_outer: 4
+i3_border_pixel: 2
+
+# Color scheme
+i3_focused_color: "#82c8ff"
+i3_focused_inactive_color: "#333333"
+i3_unfocused_color: "#333333"
+i3_urgent_color: "#900000"
+
+# Nerd Fonts versions
+nerd_fonts:
+  iosevka_version: "v2.1.0"
+  jetbrains_version: "v3.4.0"
+  roboto_version: "v3.4.0"
+
+# Alacritty package URL
+alacritty_deb_url: "https://github.com/barnumbirr/alacritty-debian/releases/download/v0.10.0-rc4-1/alacritty_0.10.0-rc4-1_amd64_bullseye.deb"
+
+# i3-gaps repository
+i3_gaps_repo: "https://www.github.com/Airblader/i3"
+
+# Pywal installation
+pywal_break_system_packages: yes
+

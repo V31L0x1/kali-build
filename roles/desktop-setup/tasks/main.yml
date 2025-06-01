@@ -1,0 +1,170 @@
+---
+# tasks file for i3-desktop-environment
+- name: Update and upgrade system packages
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: dist
+    cache_valid_time: 3600
+  become: yes
+
+- name: Install basic utilities
+  ansible.builtin.apt:
+    name: "{{ basic_packages }}"
+    state: present
+  become: yes
+
+- name: Install i3 and desktop environment packages
+  ansible.builtin.apt:
+    name: "{{ desktop_packages }}"
+    state: present
+  become: yes
+
+- name: Install i3-gaps build dependencies
+  ansible.builtin.apt:
+    name: "{{ i3_build_dependencies }}"
+    state: present
+  become: yes
+
+- name: Create fonts directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/share/fonts"
+    state: directory
+    mode: '0755'
+
+- name: Download Nerd Fonts
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "/tmp/{{ item.name }}"
+    mode: '0644'
+  loop:
+    - { name: "Iosevka.zip", url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts.iosevka_version }}/Iosevka.zip" }
+    - { name: "JetBrainsMono.zip", url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts.jetbrains_version }}/JetBrainsMono.zip" }
+    - { name: "RobotoMono.zip", url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts.roboto_version }}/RobotoMono.zip" }
+
+- name: Extract Nerd Fonts
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts/"
+    remote_src: yes
+  loop:
+    - "Iosevka.zip"
+    - "JetBrainsMono.zip"
+    - "RobotoMono.zip"
+
+- name: Clean up downloaded font archives
+  ansible.builtin.file:
+    path: "/tmp/{{ item }}"
+    state: absent
+  loop:
+    - "Iosevka.zip"
+    - "JetBrainsMono.zip"
+    - "RobotoMono.zip"
+
+- name: Refresh font cache
+  ansible.builtin.command:
+    cmd: fc-cache -fv
+  changed_when: false
+
+- name: Check installed Alacritty version
+  command: alacritty --version
+  register: alacritty_version
+  changed_when: false
+  failed_when: false
+  check_mode: no
+
+- name: Download Alacritty package
+  ansible.builtin.get_url:
+    url: "{{ alacritty_deb_url }}"
+    dest: "/tmp/alacritty.deb"
+    mode: '0644'
+  when: alacritty_version.rc != 0
+
+- name: Install Alacritty
+  ansible.builtin.apt:
+    deb: "/tmp/alacritty.deb"
+    state: present
+  become: yes
+  when: alacritty_version.rc != 0
+
+- name: Clone i3-gaps repository
+  ansible.builtin.git:
+    repo: "{{ i3_gaps_repo }}"
+    dest: "/tmp/i3-gaps"
+    force: yes
+
+- name: Create i3-gaps build directory
+  ansible.builtin.file:
+    path: "/tmp/i3-gaps/build"
+    state: directory
+    mode: '0755'
+
+- name: Configure i3-gaps build
+  ansible.builtin.command:
+    cmd: meson ..
+    chdir: "/tmp/i3-gaps/build"
+  changed_when: false
+
+- name: Build i3-gaps
+  ansible.builtin.command:
+    cmd: ninja
+    chdir: "/tmp/i3-gaps/build"
+  changed_when: false
+
+- name: Install i3-gaps
+  ansible.builtin.command:
+    cmd: ninja install
+    chdir: "/tmp/i3-gaps/build"
+  become: yes
+  become_method: sudo
+  changed_when: false
+
+- name: Install pywal
+  ansible.builtin.pip:
+    name: pywal
+    break_system_packages: "{{ pywal_break_system_packages }}"
+    state: present
+
+- name: Create configuration directories
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ config_directories }}"
+
+- name: Copy configuration files
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ config_files }}"
+
+- name: Copy wallpaper directory
+  ansible.builtin.copy:
+    src: ".wallpaper/"
+    dest: "{{ ansible_env.HOME }}/.wallpaper/"
+    mode: '0644'
+
+- name: Clean up temporary files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "/tmp/i3-gaps"
+    - "/tmp/alacritty.deb"
+
+- name: Set color scheme
+  ansible.builtin.command:
+    cmd: "wal -i {{ ansible_env.HOME}}/.wallpaper/goku.jpg"
+
+- name: Display completion message
+  ansible.builtin.debug:
+    msg: |
+      i3 desktop environment setup completed!
+      
+      Next steps:
+      1. Reboot your system
+      2. Select i3 on login screen
+      3. Run 'lxappearance' and select 'arc-dark' theme
+      4. Run 'wal -i /path/to/wallpaper' to set your color scheme
+      5. Edit ~/.fehbg to set wallpaper on boot
+

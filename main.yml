@@ -1,0 +1,10 @@
+---
+- name: "Kali Setup"
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: "Demo Debug"
+      debug:
+        msg: "Please Subscribe"
+  roles:
+    - role: "roles/desktop-setup"
