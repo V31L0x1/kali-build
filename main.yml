@@ -8,4 +8,4 @@
         msg: "Please Subscribe"
   roles:
     - role: "roles/customize-browser"
-    #- role: "roles/desktop-setup"
+    - role: "roles/desktop-setup"
