@@ -7,4 +7,5 @@
       debug:
         msg: "Please Subscribe"
   roles:
-    - role: "roles/desktop-setup"
+    - role: "roles/customize-browser"
+    #- role: "roles/desktop-setup"
