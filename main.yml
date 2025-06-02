@@ -2,10 +2,14 @@
 - name: "Kali Setup"
   hosts: localhost
   connection: local
-  tasks:
-    - name: "Demo Debug"
-      debug:
-        msg: "Please Subscribe"
   roles:
     - role: "roles/customize-browser"
     - role: "roles/desktop-setup"
+    - role: gantsign.visual-studio-code
+      users:
+        - username: "{{ ansible_user_id }}"
+          visual_studio_code_extensions:
+            - streetsidesoftware.code-spell-checker
+            - ms-python.python
+            - GitHub.copilot
+            - snyk-security.snyk-vulnerability-scanner

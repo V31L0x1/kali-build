@@ -31,6 +31,9 @@ nerd_fonts:
 # Alacritty package URL
 alacritty_deb_url: "https://github.com/barnumbirr/alacritty-debian/releases/download/v0.10.0-rc4-1/alacritty_0.10.0-rc4-1_amd64_bullseye.deb"
 
+# VS-Code package URL
+vscode_deb_url: "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+
 # i3-gaps repository
 i3_gaps_repo: "https://www.github.com/Airblader/i3"
 

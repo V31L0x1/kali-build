@@ -86,6 +86,12 @@
   become: yes
   when: alacritty_version.rc != 0
 
+- name: Clean up Alacritty package
+  ansible.builtin.file:
+    path: "/tmp/alacritty.deb"
+    state: absent
+  when: alacritty_version.rc != 0
+
 - name: Clone i3-gaps repository
   ansible.builtin.git:
     repo: "{{ i3_gaps_repo }}"
@@ -150,11 +156,10 @@
     state: absent
   loop:
     - "/tmp/i3-gaps"
-    - "/tmp/alacritty.deb"
 
 - name: Set color scheme
   ansible.builtin.command:
-    cmd: "wal -i {{ ansible_env.HOME}}/.wallpaper/goku.jpg"
+    cmd: "wal -i {{ ansible_env.HOME}}/.wallpaper/goku.png"
 
 - name: Display completion message
   ansible.builtin.debug:
