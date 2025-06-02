@@ -3,8 +3,8 @@
   hosts: localhost
   connection: local
   roles:
-    - role: "roles/customize-browser"
     - role: "roles/desktop-setup"
+    - role: "roles/customize-browser"
     - role: gantsign.visual-studio-code
       users:
         - username: "{{ ansible_user_id }}"

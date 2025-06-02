@@ -150,16 +150,26 @@
     dest: "{{ ansible_env.HOME }}/.wallpaper/"
     mode: '0644'
 
+- name: Copy Neovim configuration folder
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/nvim/"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/"
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+    mode: '0755'
+    directory_mode: '0755'
+  become: false
+
+- name: Set color scheme
+  ansible.builtin.command:
+    cmd: "wal -i {{ ansible_env.HOME}}/.wallpaper/goku.png"
+
 - name: Clean up temporary files
   ansible.builtin.file:
     path: "{{ item }}"
     state: absent
   loop:
     - "/tmp/i3-gaps"
-
-- name: Set color scheme
-  ansible.builtin.command:
-    cmd: "wal -i {{ ansible_env.HOME}}/.wallpaper/goku.png"
 
 - name: Display completion message
   ansible.builtin.debug:

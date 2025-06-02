@@ -7,6 +7,10 @@ basic_packages:
   - curl
   - git
   - thunar
+  - neovim
+  - nodejs
+  - npm
+  - neovim
 
 desktop_packages:
   - arandr
