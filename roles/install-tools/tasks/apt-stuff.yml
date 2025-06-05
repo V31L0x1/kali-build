@@ -58,6 +58,7 @@
       - ca-certificates
       - curl
       - gh
+      - crackmapexec
     state: latest
     update_cache: true
   become: true
