@@ -1,0 +1,57 @@
+---
+- name: Download Go 
+  get_url:  
+    url: "{{ go_url }}"
+    dest: "/tmp/{{ go_tarball }}"
+
+- name: Extract Go
+  unarchive:
+    src: "/tmp/{{ go_tarball }}"
+    dest: /tmp
+    remote_src: yes
+
+- name: Remove any existing Go installation
+  file: 
+    path: /usr/local/go
+    state: absent
+  become: true
+
+- name: Move Go to /usr/local
+  command: mv /tmp/go /usr/local
+  become: true
+  become_method: sudo
+
+- name: Add Go to PATH in .zshrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'export PATH=$PATH:/usr/local/go/bin'
+    insertafter: EOF
+    create: yes
+  become: false
+
+- name: verify go version
+  command: /usr/local/go/bin/go version
+  register: go_version_output
+
+- name: Remove Go tarball from /tmp
+  file:
+    path: "/tmp/{{ go_tarball }}"
+    state: absent
+
+- name: Remove extracted Go directory from /tmp
+  file:
+    path: /tmp/go
+    state: absent 
+
+- name: Print Go version
+  debug:
+    msg: "{{ go_version_output.stdout }}"
+
+- name: "install Kerbrute"
+  shell: go install github.com/ropnop/kerbrute@master
+  environment:
+    GOPATH: "{{ ansible_env.HOME }}/go"
+    PATH: "/usr/local/go/bin:{{ ansible_env.PATH }}"
+  become: false
+
+
